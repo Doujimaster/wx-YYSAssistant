@@ -88,6 +88,7 @@
   border-width: 1px;
   border-style: solid;
   border-color: #979797;
+  margin-top: 6px;
 }
 
 /* 式神列表 */
@@ -153,6 +154,50 @@
   font-weight: 700;
   margin-top: 9px;
 }
+
+.YYSSelecteView {
+  position:fixed;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width:100%;
+  overflow: hidden;
+}
+
+.SSSelecteView {
+  position:fixed;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width:100%;
+  overflow: hidden;
+}
+
+.overflowItem {
+  position:fixed;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width:100%;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-size: 24rpx;
+}
+
+.overflowImg {
+  width: 58px;
+  height: 58px;
+}
+
+.overflowText {
+  width: 100%;
+  height: 18px;
+}
+
 /*
   水平居中
   .container {
