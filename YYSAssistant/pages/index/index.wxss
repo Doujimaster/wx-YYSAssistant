@@ -1,0 +1,164 @@
+/**index.wxss**/
+.container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+/* 地方信息模块 */
+.enemyContainer {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  height: 140px;
+  margin-top: 15px;
+}
+
+/* 我方信息模块 */
+.myContainer {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  height: 140px;
+
+  margin-top: 20px;
+}
+/* 阴阳师信息 */
+.YYSInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  height: 62px;
+}
+
+/* 阴阳师选择按钮 */
+.YYSBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 62px; 
+  height: 62px; 
+  background-color: #fff; 
+  border-radius: 31px; 
+  color: #9B9B9B; 
+  font-size: 24rpx;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #979797;
+}
+/* 模式选择模块 */
+.modelContainer {
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  height: 100%; 
+  width: 74px;
+}
+
+/* 切换模式icon */
+.modelImg {
+  width: 12px; 
+  height: 12px;
+  margin-right: 3px;
+}
+
+/* 模式切换按钮 */
+.playModel {
+  color: #CF3245; 
+  font-size: 24rpx; 
+}
+
+/* 重新输入按钮 */
+.restart {
+  display: flex; 
+  flex-direction: row; 
+  align-items: center;
+  justify-content: center; 
+  width: 74px; 
+  height: 24px; 
+  border-radius: 12px; 
+  color: #9B9B9B; 
+  font-size: 24rpx; 
+  border-width: 1px;
+  border-style: solid;
+  border-color: #979797;
+}
+
+/* 式神列表 */
+.SSTable {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  height: 64px;
+  margin-top: 13px;
+}
+
+.SSItem {
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;
+  width: 64px;
+  height: 64px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #979797;
+}
+
+.SSItemText {
+  color: #9B9B9B;
+  font-size: 24rpx;
+  margin-top: 3px;
+}
+
+.SSItemIcon {
+  width: 18px;
+  height: 18px;
+}
+
+/* 更多功能 */
+.moreFunction {
+  display: flex; 
+  flex-direction: column; 
+  justify-content: flex-start; 
+  align-items: flex-start;
+  width: 100%;
+  height: 168px;
+}
+
+.functionItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
+  width: 85px;
+}
+
+.moreFunctionImg {
+  width: 63px;
+  height: 63px;
+}
+
+.moreFunctionText {
+  color: #4A4A4A;
+  font-size: 26rpx;
+  font-weight: 700;
+  margin-top: 9px;
+}
+/*
+  水平居中
+  .container {
+  display: flex;
+  flex-direction: column; // 列 row //行
+  align-items: center; // 垂直方向对齐方式(倒地是垂直还是水平貌似也跟direction有关)
+  justify-content: center;  //  水平方向对齐方式
+
+} */
