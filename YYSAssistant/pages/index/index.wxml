@@ -5,10 +5,11 @@
       <view class='YYSInfo'>
         <view style='display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start;'>
           <!-- 选择阴阳师 -->
-          <view class='YYSBtn' bindtap='onClickSelecteYYS'>
+          <view class='YYSBtn' wx:if="{{enemyYYS==null}}" data-ismy='{{false}}' bindtap='onClickSelecteYYS'>
             <view>选择</view>
             <view>阴阳师</view>
           </view>
+          <image class='YYSBtn' src='{{enemyYYS.avatarUrl}}' wx:else="{{enemyYYS}}" data-ismy='{{false}}' bindtap='onClickSelecteYYS'></image>
           <!-- 信息展示 -->
           <view style='display: flex; flex-direction: column; justify-content: center; margin-left: 14px; height: 100%;'>
             <view style='font-size: 36rpx; font-weight: 700;'>敌方</view>
@@ -30,9 +31,12 @@
       </view>
       <!-- 式神选择 -->
       <view class='SSTable'>
-        <view wx:for="{{5}}" class='SSItem' bindtap='onClickSelecteSS'>
-          <image src='../../images/ss_add_icon.png' mode="aspectFill" class='SSItemIcon'></image>
-          <text class='SSItemText'>选择式神</text>
+        <view wx:for="{{5}}" data-index='{{index}}' data-ismy='{{false}}' bindtap='onClickSelecteSS'>
+          <view wx:if="{{enemyTeam.length <= index}}"  class='SSItem'>
+            <image src='../../images/ss_add_icon.png' mode="aspectFill" class='SSItemIcon'></image>
+            <text class='SSItemText'>选择式神</text>
+          </view>
+          <image wx:else src="{{enemyTeam[index].coverUrl}}" mode="aspectFill" class='SSItem'></image>
         </view>
       </view>
     </view>
@@ -40,10 +44,11 @@
       <view class='YYSInfo'>
         <view style='display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start;'>
           <!-- 选择阴阳师 -->
-          <view class='YYSBtn' bindtap='onClickSelecteYYS'>
+          <view class='YYSBtn' wx:if="{{myYYS==null}}" data-ismy='{{true}}' bindtap='onClickSelecteYYS'>
             <view>选择</view>
             <view>阴阳师</view>
           </view>
+          <image wx:else class='YYSBtn' src='{{myYYS.avatarUrl}}' data-ismy='{{true}}' bindtap='onClickSelecteYYS'></image>
           <!-- 信息展示 -->
           <view style='display: flex; flex-direction: column; justify-content: center; margin-left: 14px; height: 100%;'>
             <view style='font-size: 36rpx; font-weight: 700;'>我方</view>
@@ -60,9 +65,12 @@
       </view>
       <!-- 式神选择 -->
       <view class='SSTable'>
-        <view wx:for="{{5}}" class='SSItem' bindtap='onClickSelecteSS'>
-          <image src='../../images/ss_add_icon.png' mode="aspectFill" class='SSItemIcon'></image>
-          <text class='SSItemText' bindtap='onClickSelecteSS'>选择式神</text>
+        <view wx:for="{{5}}" data-index='{{index}}' data-ismy='{{true}}' bindtap='onClickSelecteSS'>
+          <view wx:if="{{myTeam.length <= index}}"  class='SSItem'>
+            <image src='../../images/ss_add_icon.png' mode="aspectFill" class='SSItemIcon'></image>
+            <text class='SSItemText'>选择式神</text>
+          </view>
+          <image wx:else src="{{myTeam[index].coverUrl}}" class='SSItem'></image>
         </view>
       </view>
     </view>
@@ -76,22 +84,31 @@
       <text style='font-size: 28rpx;font-weight: 700;color: #4A4A4A; margin-left: 3px;'>更多功能</text>
     </view>
     <view style='display: flex;flex-direction: row;justify-content: space-around;width:100%;'>
-      <view wx:for="{{functionList}}" wx:for-item="item" class='functionItem' bindtap='onClickWaiteFunture'>
+      <view wx:for="{{functionList}}" wx:for-item="item" wx:key="name" class='functionItem' bindtap='onClickWaiteFunture'>
         <image src='{{item.img}}' mode="aspectFill" class='moreFunctionImg'></image>
         <text class='moreFunctionText'>{{item.name}}</text>
       </view>
     </view>
   </view>
-  <view class='YYSSelecteView' hidden="{{isShowYYSSelecteView}}">
-    <view wx:for="{{YYSList}}" wx:for-item="item" class='overflowItem'>
-      <image src='{{item.img}}' mode="aspectFill" class='overflowImg'></image>
-      <text class='overflowText' style='display: flex;flex-direction: row;align-items: center;justify-content: center;'>{{item.value}}</text>
+
+  <!-- 阴阳师选择悬浮窗 -->
+  <view class='YYSSelecteView' hidden="{{isShowYYSSelecteView}}" style='margin-top: {{overflowY}}px'>
+    <view class='overflowContainer'>
+      <view wx:for="{{YYSList}}" wx:for-item="item" data-index='{{index}}' class='overflowItem' bindtap='chooseYYS'>
+        <image src='{{item.avatarUrl}}' mode="aspectFill" class='YYSOverflowImg'></image>
+      </view>
     </view>
+    <image class='overflowArrow' src='../../images/overflow_arrow.png' style='left:{{arrowX}}px;'></image>
   </view>
-  <view class='SSSelecteView' hidden="{{isShowSSSelecteView}}">
-    <view wx:for="{{SSList}}" wx:for-item="item"  class='overflowItem'>
-      <image src='{{item.img}}' mode="aspectFill" class='overflowImg'></image>
-      <text class='overflowText' style='display: flex;flex-direction: row;align-items: center;justify-content: center;'>{{item.value}}</text>
+
+  <!-- 式神选择悬浮窗 -->
+  <view class='SSSelecteView' hidden="{{isShowSSSelecteView}}" style='margin-top: {{overflowY}}px' >
+    <view class='overflowContainer'>
+      <view wx:for="{{SSList}}" wx:for-item="item" data-index='{{index}}' class='overflowItem' bindtap='chooseSS'>
+        <image src='{{item.coverUrl}}' mode="aspectFill" class='overflowImg'></image>
+        <text class='overflowText' style='display: flex;flex-direction: row;align-items: center;justify-content: center;'>{{item.winRate*100}}%</text>
+      </view>
     </view>
+    <image class='overflowArrow' src='../../images/overflow_arrow.png' style='left:{{arrowX}}px;'></image>
   </view>
 </view>

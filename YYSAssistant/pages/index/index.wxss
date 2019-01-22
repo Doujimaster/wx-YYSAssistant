@@ -161,8 +161,23 @@
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  width:100%;
   overflow: hidden;
+  margin-left: 14px;
+  left: 0px;
+
+}
+
+.overflowContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 7px;
+  border-width: 2px;
+  border-color: #F5A623;
+  border-style: solid;
+  background-color: #fff;
+  margin-top: 6px;
 }
 
 .SSSelecteView {
@@ -171,39 +186,47 @@
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  width:100%;
   overflow: hidden;
+  margin-left: 14px;
+  left: 0px;
+}
+
+.overflowArrow {
+  position:fixed;
+  width: 14px;
+  height: 8px;
 }
 
 .overflowItem {
-  position:fixed;
   display: flex;
-  flex-direction: row-reverse;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width:100%;
-  overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.4);
-  color: #fff;
-  font-size: 24rpx;
+  width:58px;
+  margin: 5px;
 }
 
 .overflowImg {
   width: 58px;
   height: 58px;
+  border-width: 1px;
+  border-color: #979797;
+  border-style: solid;
 }
 
 .overflowText {
-  width: 100%;
+  position:fixed;
+  width: 58px;
   height: 18px;
+  font-size: 24rpx;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  margin-top: 41px;
 }
 
-/*
-  水平居中
-  .container {
-  display: flex;
-  flex-direction: column; // 列 row //行
-  align-items: center; // 垂直方向对齐方式(倒地是垂直还是水平貌似也跟direction有关)
-  justify-content: center;  //  水平方向对齐方式
-
-} */
+.YYSOverflowImg {
+  width: 58px;
+  height: 58px;
+  border-radius: 29px; 
+  border-width: 1px;
+  border-style: solid;
+border-color: #979797;
+}
