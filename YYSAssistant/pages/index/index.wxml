@@ -93,22 +93,25 @@
 
   <!-- 阴阳师选择悬浮窗 -->
   <view class='YYSSelecteView' hidden="{{isShowYYSSelecteView}}" style='margin-top: {{overflowY}}rpx'>
-    <view class='overflowContainer'>
-      <view wx:for="{{YYSList}}" wx:key="roleID" wx:for-item="item" data-index='{{index}}' class='overflowItem' bindtap='chooseYYS'>
+    <scroll-view scroll-x class='YYSOverflowScrollContainer'>
+      <view wx:for="{{YYSList}}" wx:key="roleID" wx:for-item="item" data-index='{{index}}' class='YYSOverflowItem' bindtap='chooseYYS'>
         <image src='{{item.Avatarurl}}' mode="aspectFill" class='YYSOverflowImg'></image>
       </view>
-    </view>
+    </scroll-view>
     <image class='overflowArrow' src='../../images/overflow_arrow.png' style='left:{{arrowX}}rpx;'></image>
   </view>
 
   <!-- 式神选择悬浮窗 -->
   <view class='SSSelecteView' hidden="{{isShowSSSelecteView}}" style='margin-top: {{overflowY}}rpx' >
-    <view class='overflowContainer'>
-      <view wx:for="{{SSList}}" wx:key="cardID" wx:for-item="item" data-index='{{index}}' class='overflowItem' bindtap='chooseSS'>
-        <image src='{{item.Coverurl}}' mode="aspectFill" class='overflowImg'></image>
-        <text class='overflowText' style='display: flex;flex-direction: row;align-items: center;justify-content: center;'>{{item.Winr3*100}}%</text>
+    <scroll-view scroll-y class='overflowScrollContainer'>
+      <view wx:for="{{SSList.length / 5}}" wx:key="this" wx:for-item="rowIndex" class='overflowContainer'>
+        <view wx:for="{{5}}" wx:key="this" data-index='{{rowIndex * 5 + index}}' class='overflowItem' bindtap='chooseSS'>
+          <image wx:if="{{SSList.length > rowIndex * 5 + index }}" src='{{SSList[rowIndex * 5 + index].Coverurl}}' mode="aspectFill" class='overflowImg'></image>
+          <text wx:if="{{SSList.length > rowIndex * 5 + index }}" class='overflowText' style='display: flex;flex-direction: row;align-items: center;justify-content: center;'>{{SSList[rowIndex * 5 + index].Winr3*100}}%</text>
+        </view>
       </view>
-    </view>
+      
+    </scroll-view>
     <image class='overflowArrow' src='../../images/overflow_arrow.png' style='left:{{arrowX}}rpx;'></image>
   </view>
 </view>

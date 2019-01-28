@@ -42,7 +42,9 @@ Page({
       }
     ]
 
-
+    wx.showShareMenu({
+      withShareTicket: true
+    })
 
     this.setData({
       functionList: functionList,
@@ -51,6 +53,7 @@ Page({
     this.getDataInfo();
 
   },
+  //  点击选择阴阳师
   onClickSelecteYYS: function(e) {
 
     var isMy = e.currentTarget.dataset.ismy;
@@ -69,6 +72,7 @@ Page({
       }
      )
   },
+  //  点击选择式神
   onClickSelecteSS: function(e) {
     var isMy = e.currentTarget.dataset.ismy
     var y = this.data.overflowY
@@ -78,7 +82,6 @@ Page({
     } else {
       y = 298
     }
-    console.log(e)
     this.setData(
       { 
         arrowX: index*(128 + 16)  + 8 + 64,
@@ -89,6 +92,7 @@ Page({
       }
     )
   },
+  //  展示敬请期待弹窗
   onClickWaiteFunture: function() {
     wx.showModal({
       content: '敬请期待',
@@ -98,16 +102,19 @@ Page({
   onTapCloseOverflow: function() {
     
   },
+  //  清空地方式神
   cleanEnemySS: function() {
     this.setData({
       enemyTeam: [{}, {}, {}, {}, {}]
     })
   },
+  //  清空我方式神
   cleanMySS: function() {
     this.setData({
       myTeam: [{},{},{},{},{}]
     })
   },
+  //  更改模式
   changeModel: function() {
     if (this.data.isGuessModel) {
       this.setData({
@@ -124,6 +131,7 @@ Page({
     }
     
   },
+  //  选择阴阳师
   chooseYYS: function(e) {
     var index = parseInt(e.currentTarget.dataset.index)
     var isMy = this.data.overflowY > 320
@@ -143,18 +151,15 @@ Page({
       })
     }
   },
+  //  选择式神
   chooseSS: function(e) {
-
+    console.log(e)
     var index = parseInt(e.currentTarget.dataset.index)
     var isMy = this.data.overflowY > 320
-    console.log(index)
+    console.log(isMy)
     if (isMy) { // 我方
       var myTeam = this.data.myTeam
-      if (myTeam.length <= index) { //  新增
-        myTeam.push(this.data.SSList[index])
-      } else { // 修改
-        myTeam[this.data.teamIndex] = this.data.SSList[index]
-      }
+      myTeam[this.data.teamIndex] = this.data.SSList[index]
     
       this.setData({
         myTeam: myTeam,
@@ -162,18 +167,14 @@ Page({
       })
     } else { // 敌方
       var enemyTeam = this.data.enemyTeam
-      if (enemyTeam.length <= index) { //  新增
-        enemyTeam.push(this.data.SSList[index])
-      } else { // 修改
-        enemyTeam[this.data.teamIndex] = this.data.SSList[index]
-      }
+      enemyTeam[this.data.teamIndex] = this.data.SSList[index]
       this.setData({
         enemyTeam: enemyTeam,
         isShowSSSelecteView: true
       })
     }
 
-    this.getWinRate(ismy)
+    this.getWinRate(isMy)
   },
   getDataInfo: function(isMy) {
 
@@ -201,6 +202,7 @@ Page({
       },
     })
   },
+  //  获取猜牌模式卡组
   getGuessCardGroup: function(isMy) {
     wx:wx.request({
       url: app.globalData.baseUrl + '/v1/querySCardGroup',
@@ -229,6 +231,7 @@ Page({
       },
     })
   },
+  //  获取胜率
   getWinRate:function() {
 
     var cards = []
@@ -274,6 +277,36 @@ Page({
       complete: function(res) {
 
       },
+    })
+  },
+  onShareAppMessage: function () {
+    if (!this.data.id) {
+      // todo 返回默认分享信息，比如小程序首页
+    }
+
+    return {
+      title: '分享',
+      path: 'share?id=' + app.globalData.code,
+      success: function (res) {
+        console.log("分享出去了")
+        console.log(res)
+
+        wx.showShareMenu({
+          withShareTicket: true
+        })
+      }
+    };
+  },
+  payment: function() {
+    wx:wx.requestPayment({
+      timeStamp: '',
+      nonceStr: '',
+      package: '',
+      signType: '',
+      paySign: '',
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
     })
   }
 })

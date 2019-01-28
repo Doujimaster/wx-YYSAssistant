@@ -167,17 +167,35 @@
 
 }
 
-.overflowContainer {
+.YYSOverflowScrollContainer {
+  position:fixed;
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
   padding: 14rpx;
   border-width: 4rpx;
   border-color: #F5A623;
   border-style: solid;
   background-color: #fff;
   margin-top: 12rpx;
+  width: 680rpx;
+  height: 140rpx;
+}
+
+.overflowScrollContainer {
+  padding: 14rpx;
+  border-width: 4rpx;
+  border-color: #F5A623;
+  border-style: solid;
+  background-color: #fff;
+  margin-top: 12rpx;
+  width: 680rpx;
+  height: 400rpx;
+}
+
+.overflowContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .SSSelecteView {
@@ -197,9 +215,15 @@
   height: 16rpx;
 }
 
+.YYSOverflowItem {
+  display: inline-block;
+  width: 116rpx;
+  margin: 10rpx;
+}
+
 .overflowItem {
   display: flex;
-  width:116rpx;
+  width: 116rpx;
   margin: 10rpx;
 }
 
@@ -212,7 +236,7 @@
 }
 
 .overflowText {
-  position:fixed;
+  position:absolute;
   width: 116rpx;
   height: 36rpx;
   font-size: 24rpx;

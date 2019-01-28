@@ -60,5 +60,13 @@ App({
         console.log("登录完成:"+res)
       },
     })
+  },
+  onShow: function (options) {
+    console.log(options)
+    wx.showShareMenu({
+      withShareTicket: true
+    })
+
+    
   }
 })
