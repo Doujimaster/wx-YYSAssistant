@@ -7,19 +7,20 @@ Page({
       isShowYYSSelecteView: true,
       isShowSSSelecteView: true,
       isGuessModel: true,
-      enemyWinRate: "0%",
-      myWinRate: "0%",
+      enemyWinRate: "计算中",
+      myWinRate: "计算中",
       currentModel: "猜牌模式",
       functionList: [],
-      enemyTeam: [],
-      myTeam: [],
-      SSList: [],
-      YYSList: [],
+      enemyTeam: [{},{},{},{},{}],
+      myTeam: [{},{},{},{},{}],
+      SSList: null,
+      YYSList: null,
       enemyYYS: null,
       myYYS: null,
-      overflowY:65,
+      overflowY:130,
       teamIndex: 0,
-      arrowX: 0
+      arrowX: 0,
+      userInfo:{}
   },
   onLoad: function () {
     var functionList = [
@@ -41,88 +42,30 @@ Page({
       }
     ]
 
-    var defSSList = [
-      {
-        cardID:1,
-        name: "aaa",
-        winRate: 0.6,
-        coverUrl: "../../images/yys.png",
-        rareLevel: 1,
-        fightType: 2
-      },
-      {
-        cardID: 1,
-        name: "aaa",
-        winRate: 0.8,
-        coverUrl: "../../images/yys2.png",
-        rareLevel: 1,
-        fightType: 2
-      }, 
-      {
-        cardID: 1,
-        name: "aaa",
-        winRate: 1,
-        coverUrl: "../../images/yys3.png",
-        rareLevel: 1,
-        fightType: 2
-      }
-    ]
 
-    var defYYSList = [
-      {
-        roleID:1,
-        name:"阿标",
-        avatarUrl:"../../images/yys.png"
-      },
-      {
-        roleID: 1,
-        name: "阿标",
-        avatarUrl: "../../images/yys2.png"
-      },
-      {
-        roleID: 1,
-        name: "阿标",
-        avatarUrl: "../../images/yys3.png"
-      },
-      {
-        roleID: 1,
-        name: "阿标",
-        avatarUrl: "../../images/yys.png"
-      },
-      {
-        roleID: 1,
-        name: "阿标",
-        avatarUrl: "../../images/yys2.png"
-      }
-    ]
-
-    var userinfo={
-      userID:1,
-      name:"ddd",
-      isPaidBasic:true,
-      inviterID: 2
-    }
 
     this.setData({
       functionList: functionList,
-      SSList: defSSList,
-      YYSList: defYYSList
     })
+
+    this.getDataInfo();
+
   },
   onClickSelecteYYS: function(e) {
 
     var isMy = e.currentTarget.dataset.ismy;
     var y = this.data.overflowY;
     if (isMy) {
-      y = 225
+      y = 450
     } else {
-      y = 65
+      y = 130
     }
     this.setData(
       { 
-        arrowX: 32,
+        arrowX: 65,
         overflowY: y,
-        isShowYYSSelecteView: false
+        isShowYYSSelecteView: false,
+        isShowSSSelecteView: true
       }
      )
   },
@@ -131,16 +74,18 @@ Page({
     var y = this.data.overflowY
     var index = parseInt(e.currentTarget.dataset.index)
     if (isMy) {
-      y = 308
+      y = 616
     } else {
-      y = 149
+      y = 298
     }
+    console.log(e)
     this.setData(
       { 
-        arrowX: e.detail.x-8,
+        arrowX: index*(128 + 16)  + 8 + 64,
         teamIndex: index,
         overflowY: y,
-        isShowSSSelecteView: false
+        isShowSSSelecteView: false,
+        isShowYYSSelecteView: true
       }
     )
   },
@@ -155,12 +100,12 @@ Page({
   },
   cleanEnemySS: function() {
     this.setData({
-      enemyTeam:[]
+      enemyTeam: [{}, {}, {}, {}, {}]
     })
   },
   cleanMySS: function() {
     this.setData({
-      myTeam: []
+      myTeam: [{},{},{},{},{}]
     })
   },
   changeModel: function() {
@@ -169,6 +114,8 @@ Page({
         isGuessModel: false,
         currentModel: "自选模式"
       })
+      self.getGuessCardGroup(true)
+      self.getGuessCardGroup(false)
     } else {
       this.setData({
         isGuessModel: true,
@@ -179,7 +126,7 @@ Page({
   },
   chooseYYS: function(e) {
     var index = parseInt(e.currentTarget.dataset.index)
-    var isMy = this.data.overflowY > 160
+    var isMy = this.data.overflowY > 320
     if (isMy) {
       var myYYS = this.data.myYYS
       myYYS = this.data.YYSList[index]
@@ -197,8 +144,9 @@ Page({
     }
   },
   chooseSS: function(e) {
+
     var index = parseInt(e.currentTarget.dataset.index)
-    var isMy = this.data.overflowY > 160
+    var isMy = this.data.overflowY > 320
     console.log(index)
     if (isMy) { // 我方
       var myTeam = this.data.myTeam
@@ -224,6 +172,108 @@ Page({
         isShowSSSelecteView: true
       })
     }
-    
+
+    this.getWinRate(ismy)
+  },
+  getDataInfo: function(isMy) {
+
+    wx:wx.request({
+      url: app.globalData.baseUrl + "/v1/querySCardsInfo",
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'GET',
+      dataType: 'json',
+      responseType: 'text',
+      success: res => {
+        console.log(res.data.data)
+        this.setData({
+          SSList: res.data.data.cards,
+          YYSList: res.data.data.roles
+        })
+        console.log("querySCardsInfo Success!!!!")
+      },
+      fail: function(res) {
+        console.log("querySCardsInfo Fail!!!!!!")
+      },
+      complete: function(res) {
+        console.log("querySCardsInfo complete!!!!!!")
+      },
+    })
+  },
+  getGuessCardGroup: function(isMy) {
+    wx:wx.request({
+      url: app.globalData.baseUrl + '/v1/querySCardGroup',
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'GET',
+      dataType: 'json',
+      responseType: 'json',
+      success: res => {
+        if (ismy) {
+          this.setData({
+            myTeam: res.result.cards
+          })
+        } else {
+          this.setData({
+            enemyTeam: res.result.cards
+          })
+        }
+      },
+      fail: function(res) {
+
+      },
+      complete: function(res) {
+
+      },
+    })
+  },
+  getWinRate:function() {
+
+    var cards = []
+    var team = this.data.myTeam
+    var roleID = this.data.myYYS.roleID
+    for (x in team) {
+      if (x.cardID == null) {
+        continue
+      }
+      cards.push(x.cardID)
+    }
+
+    if(cards.length != 5) {
+      return
+    }
+
+    wx:wx.request({
+      url: app.globalData.baseUrl + "/v1/calculateSCardWRate",
+      data: {
+        cards: cards,
+        role: roleID
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'POST',
+      dataType: 'json',
+      responseType: 'json',
+      success: res => {
+        if (isMy) {
+          this.setData({
+            myWinRate: res.data.resul
+          })
+        } else {
+          this.setData({
+            enemyWinRate: res.data.resul
+          })
+        }
+      },
+      fail: function(res) {
+
+      },
+      complete: function(res) {
+
+      },
+    })
   }
 })

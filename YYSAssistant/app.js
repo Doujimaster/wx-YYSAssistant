@@ -10,6 +10,9 @@ App({
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
+
+        console.log("code" + res)
+        // this.login(res.code,"")
       }
     })
     // 获取用户信息
@@ -34,6 +37,28 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    baseUrl: "http://193.112.127.7:8080"
+  },
+  login: function (code,inviter) {
+    wx: wx.request({
+      url: this.globalData.baseUrl + "/v1/access",
+      data: {
+        "user": code,
+        "inviter": inviter
+      },
+      method: 'POST',
+      dataType: 'json',
+      responseType: 'json',
+      success: function (res) { 
+        console.log("登录成功:"+res)
+      },
+      fail: function (res) {
+        console.log("登录失败:" + res)
+      },
+      complete: function (res) { 
+        console.log("登录完成:"+res)
+      },
+    })
   }
 })

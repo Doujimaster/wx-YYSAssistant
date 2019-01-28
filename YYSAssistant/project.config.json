@@ -4,7 +4,7 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
@@ -12,8 +12,8 @@
 		"autoAudits": false
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.5.0",
-	"appid": "wxaabc9eb65f200ea5",
+	"libVersion": "2.5.1",
+	"appid": "wxb3069f70b85e5320",
 	"projectname": "YYSAssistant",
 	"debugOptions": {
 		"hidedInDevtools": []
