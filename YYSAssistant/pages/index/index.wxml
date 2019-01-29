@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class="container">
+<view class="container" bindtap='onTapCloseOverflow'>
   <view style='display: flex; flex-direction: column; align-items: center; justify-content: flex-start;'>
     <view class='enemyContainer'>
       <view class='YYSInfo'>
@@ -36,10 +36,12 @@
             <image src='../../images/ss_add_icon.png' mode="aspectFill" class='SSItemIcon'></image>
             <text class='SSItemText'>选择式神</text>
           </view>
-          <image wx:else src="{{enemyTeam[index].Coverurl}}" mode="aspectFill" class='SSItem'></image>
+          <image wx:else src="{{enemyTeam[index].Coverurl}}" class='SSItem'></image>
         </view>
       </view>
     </view>
+
+
     <view class='myContainer'>
       <view class='YYSInfo'>
         <view style='display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start;'>
@@ -87,6 +89,7 @@
       <view wx:for="{{functionList}}" wx:key="name" wx:for-item="item" wx:key="name" class='functionItem' bindtap='onClickWaiteFunture'>
         <image src='{{item.img}}' mode="aspectFill" class='moreFunctionImg'></image>
         <text class='moreFunctionText'>{{item.name}}</text>
+        <text wx:if="{{item.des!=null}}" class='moreFunctionDesText'>{{item.des}}</text>
       </view>
     </view>
   </view>
@@ -113,5 +116,24 @@
       
     </scroll-view>
     <image class='overflowArrow' src='../../images/overflow_arrow.png' style='left:{{arrowX}}rpx;'></image>
+  </view>
+</view>
+
+<view class='paymentAlert' hidden='{{isShowPayAlert}}' bindtap='onTapCloseAlert'>
+  <view class='alertContainer'>
+    <view style='display: flex;flex-direction: row;justify-content: space-between;width:514rpx;margin-top:40rpx;'>
+      <view wx:for="{{functionList}}" wx:key="name" wx:for-item="item" wx:key="name" style='display: flex;flex-direction: column;align-items: center;'>
+        <image src='{{item.img}}' mode="aspectFill" style='width:100rpx;height:100rpx;'>
+          <image src='../../images/ss_ok_icon.png' mode="aspectFill" style='position:absolute;width:36rpx;height:36rpx;top:410rpx;left:{{index * 100 + 190 + index * 34}}rpx;'></image>
+        </image>
+        <text style='margin-top:16rpx;font-size:20rpx;color:#4A4A4A;font-weight: 600;'>{{item.name}}</text>
+        <text wx:if="{{item.des!=null}}" style='margin-top:6rpx;font-size:18rpx;color:#9B9B9B;'>{{item.des}}</text>
+        
+      </view>
+    </view>
+    <text style='margin-top:40rpx;font-size:26rpx;color:#4A4A4A;font-weight: 600;'>试用次数已用完，成为会员马上获得更多功能</text>
+    <image src='../../images/pat_btn.png' style='margin-top:50rpx;width:540rpx;height:120rpx;' mode="aspectFill" bindtap='payment'></image>
+    <text style='position:absolute;font-size:28rpx;color:#fff;font-weight: 550;top:674rpx;'>19元成为终身VIP，斗技神器任性用</text>
+    <text style='margin-top:28;font-size:24rpx;color:#4A4A4A;'>已有<text style='color:#CF3245;'>980</text>位玩家选择斗技助手</text>
   </view>
 </view>

@@ -4,8 +4,9 @@ const app = getApp()
 
 Page({
   data: {
-      isShowYYSSelecteView: true,
-      isShowSSSelecteView: true,
+      isShowPayAlert: true, //  true是隐藏
+      isShowYYSSelecteView: true,//  true是隐藏
+      isShowSSSelecteView: true,//  true是隐藏
       isGuessModel: true,
       enemyWinRate: "计算中",
       myWinRate: "计算中",
@@ -26,19 +27,23 @@ Page({
     var functionList = [
       {
         img:"../../images/more_function_grade_img.png",
-        name: "战绩分析"
+        name: "模拟对战",
+        des: ""
       },
       {
         img: "../../images/more_function_team_config_img.png",
-        name: "阵容搭配"
+        name: "猜牌模式",
+        des: ""
       },
       {
         img: "../../images/more_function_train_img.png",
-        name: "翻牌训练"
+        name: "战绩分析",
+        des: "即将上线"
       },
       {
         img: "../../images/more_function_yh_img.png",
-        name: "模拟御魂强化"
+        name: "模拟御魂强化",
+        des: "即将上线"
       }
     ]
 
@@ -100,7 +105,16 @@ Page({
     })
   },
   onTapCloseOverflow: function() {
-    
+    // console.log(this.data.isShowSSSelecteView)
+    // console.log(this.data.isShowYYSSelecteView)
+    // if (!this.data.isShowSSSelecteView || !this.data.isShowYYSSelecteView) {
+    //   this.setData(
+    //     {
+    //       isShowSSSelecteView: true,
+    //       isShowYYSSelecteView: true
+    //     }
+    //   )
+    // }
   },
   //  清空地方式神
   cleanEnemySS: function() {
@@ -118,8 +132,9 @@ Page({
   changeModel: function() {
     if (this.data.isGuessModel) {
       this.setData({
-        isGuessModel: false,
-        currentModel: "自选模式"
+        // isGuessModel: false,
+        // currentModel: "自选模式",
+        isShowPayAlert: false
       })
       self.getGuessCardGroup(true)
       self.getGuessCardGroup(false)
@@ -232,7 +247,7 @@ Page({
     })
   },
   //  获取胜率
-  getWinRate:function() {
+  getWinRate: function (isMy) {
 
     var cards = []
     var team = this.data.myTeam
@@ -307,6 +322,11 @@ Page({
       success: function(res) {},
       fail: function(res) {},
       complete: function(res) {},
+    })
+  },
+  onTapCloseAlert: function() {
+    this.setData({
+      isShowPayAlert: true
     })
   }
 })
