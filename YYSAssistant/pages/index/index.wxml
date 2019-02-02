@@ -97,7 +97,7 @@
   <!-- 阴阳师选择悬浮窗 -->
   <view class='YYSSelecteView' hidden="{{isShowYYSSelecteView}}" style='margin-top: {{overflowY}}rpx'>
     <scroll-view scroll-x class='YYSOverflowScrollContainer'>
-      <view wx:for="{{YYSList}}" wx:key="roleID" wx:for-item="item" data-index='{{index}}' class='YYSOverflowItem' bindtap='chooseYYS'>
+      <view wx:for="{{YYSList}}" wx:key="Roleid" wx:for-item="item" data-index='{{index}}' class='YYSOverflowItem' bindtap='chooseYYS'>
         <image src='{{item.Avatarurl}}' mode="aspectFill" class='YYSOverflowImg'></image>
       </view>
     </scroll-view>

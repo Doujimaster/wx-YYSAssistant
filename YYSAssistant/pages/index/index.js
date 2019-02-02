@@ -132,12 +132,12 @@ Page({
   changeModel: function() {
     if (this.data.isGuessModel) {
       this.setData({
-        // isGuessModel: false,
-        // currentModel: "自选模式",
-        isShowPayAlert: false
+        isGuessModel: false,
+        currentModel: "自选模式",
+        // isShowPayAlert: false
       })
-      self.getGuessCardGroup(true)
-      self.getGuessCardGroup(false)
+      this.getGuessCardGroup(true)
+      this.getGuessCardGroup(false)
     } else {
       this.setData({
         isGuessModel: true,

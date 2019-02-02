@@ -12,7 +12,7 @@ App({
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
 
         console.log("code" + res)
-        // this.login(res.code,"")
+        this.login(res.code,"")
       }
     })
     // 获取用户信息
