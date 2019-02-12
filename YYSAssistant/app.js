@@ -12,7 +12,7 @@ App({
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
 
         console.log("code" + res)
-        this.login(res.code,"")
+        this.login(res.code)
       }
     })
     // 获取用户信息
@@ -38,20 +38,26 @@ App({
   },
   globalData: {
     userInfo: null,
-    baseUrl: "http://193.112.127.7:8080"
+    baseUrl: "http://193.112.127.7:8080",
+    openID: null,
+    session: null
   },
-  login: function (code,inviter) {
+  login: function (code) {
     wx: wx.request({
-      url: this.globalData.baseUrl + "/v1/access",
+      url: this.globalData.baseUrl + "/v1/accessUser",
       data: {
-        "user": code,
-        "inviter": inviter
+        'accessCode': code
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
       dataType: 'json',
-      responseType: 'json',
-      success: function (res) { 
-        console.log("登录成功:"+res)
+      responseType: 'text',
+      success: res => { 
+        console.log(res)
+        this.globalData.openID = res.data.data.userinfo.openid
+        this.globalData.session = res.data.data.userinfo.session_key
       },
       fail: function (res) {
         console.log("登录失败:" + res)

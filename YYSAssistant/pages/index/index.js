@@ -168,10 +168,10 @@ Page({
   },
   //  选择式神
   chooseSS: function(e) {
-    console.log(e)
+
     var index = parseInt(e.currentTarget.dataset.index)
     var isMy = this.data.overflowY > 320
-    console.log(isMy)
+
     if (isMy) { // 我方
       var myTeam = this.data.myTeam
       myTeam[this.data.teamIndex] = this.data.SSList[index]
@@ -189,7 +189,7 @@ Page({
       })
     }
 
-    this.getWinRate(isMy)
+    this.getWinRate()
   },
   getDataInfo: function(isMy) {
 
@@ -202,7 +202,7 @@ Page({
       dataType: 'json',
       responseType: 'text',
       success: res => {
-        console.log(res.data.data)
+
         this.setData({
           SSList: res.data.data.cards,
           YYSList: res.data.data.roles
@@ -226,15 +226,16 @@ Page({
       },
       method: 'GET',
       dataType: 'json',
-      responseType: 'json',
+      responseType: 'text',
       success: res => {
-        if (ismy) {
+        console.log(res)
+        if (isMy) {
           this.setData({
-            myTeam: res.result.cards
+            myTeam: res.data.data.group
           })
         } else {
           this.setData({
-            enemyTeam: res.result.cards
+            enemyTeam: res.data.data.group
           })
         }
       },
@@ -247,50 +248,62 @@ Page({
     })
   },
   //  获取胜率
-  getWinRate: function (isMy) {
+  getWinRate: function () {
 
     var cards = []
-    var team = this.data.myTeam
-    var roleID = this.data.myYYS.roleID
-    for (x in team) {
-      if (x.cardID == null) {
-        continue
-      }
-      cards.push(x.cardID)
-    }
+    var hisCards = []
 
-    if(cards.length != 5) {
+    this.data.myTeam.forEach(function (element) {
+      if (element.Cardid != null) {
+        cards.push(element.Cardid)
+      }
+      
+    });
+
+    this.data.enemyTeam.forEach(function (element) {
+      if (element.Cardid != null) {
+        hisCards.push(element.Cardid)
+      }
+
+    });
+
+    if (cards.length != 5 || hisCards.length != 5) {
       return
     }
 
     wx:wx.request({
-      url: app.globalData.baseUrl + "/v1/calculateSCardWRate",
+      url: app.globalData.baseUrl + "/v1/caculateSCards",
       data: {
-        cards: cards,
-        role: roleID
+        'myCardidArray': cards[0],
+        'myCardidArray': cards[1],
+        'myCardidArray': cards[2],
+        'myCardidArray': cards[3],
+        'myCardidArray': cards[4],
+        'hisCardidArray': hisCards[0],
+        'hisCardidArray': hisCards[1],
+        'hisCardidArray': hisCards[2],
+        'hisCardidArray': hisCards[3],
+        'hisCardidArray': hisCards[4],
       },
       header: {
-        'content-type': 'application/json'
+        'content-type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
       dataType: 'json',
-      responseType: 'json',
+      responseType: 'text',
       success: res => {
-        if (isMy) {
-          this.setData({
-            myWinRate: res.data.resul
-          })
-        } else {
-          this.setData({
-            enemyWinRate: res.data.resul
-          })
-        }
+        console.log("计算胜率成功")
+        console.log(res)
+        // this.setData({
+        //   myWinRate: res.data.winrate,
+        //   enemyWinRate: 1 - res.data.winrate
+        // })
       },
       fail: function(res) {
-
+        console.log("计算胜率失败")
       },
       complete: function(res) {
-
+        console.log("计算胜率完成")
       },
     })
   },
