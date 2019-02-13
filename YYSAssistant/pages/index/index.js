@@ -274,16 +274,8 @@ Page({
     wx:wx.request({
       url: app.globalData.baseUrl + "/v1/caculateSCards",
       data: {
-        'myCardidArray': cards[0],
-        'myCardidArray': cards[1],
-        'myCardidArray': cards[2],
-        'myCardidArray': cards[3],
-        'myCardidArray': cards[4],
-        'hisCardidArray': hisCards[0],
-        'hisCardidArray': hisCards[1],
-        'hisCardidArray': hisCards[2],
-        'hisCardidArray': hisCards[3],
-        'hisCardidArray': hisCards[4],
+        'myCardidArray': '['+cards.toString()+']',
+        'hisCardidArray': '['+hisCards.toString()+']'
       },
       header: {
         'content-type': 'application/x-www-form-urlencoded'
@@ -294,9 +286,19 @@ Page({
       success: res => {
         console.log("计算胜率成功")
         console.log(res)
+        var jsonStr = res.data;
+        console.log(jsonStr)
+        jsonStr = jsonStr.replace(" ", "");
+        if (typeof jsonStr != 'object') {
+          jsonStr = jsonStr.replace(/\ufeff/g, "");//重点
+          var jj = JSON.parse(jsonStr);
+          res.data = jj;
+        }
+        
+        console.log(res)
         // this.setData({
-        //   myWinRate: res.data.winrate,
-        //   enemyWinRate: 1 - res.data.winrate
+        //   myWinRate: res.data.data.winrate,
+        //   enemyWinRate: 1 - res.data.data.winrate
         // })
       },
       fail: function(res) {
