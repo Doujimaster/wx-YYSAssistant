@@ -7,10 +7,10 @@ Page({
       isShowPayAlert: true, //  true是隐藏
       isShowYYSSelecteView: true,//  true是隐藏
       isShowSSSelecteView: true,//  true是隐藏
-      isGuessModel: true,
+      isGuessModel: false,
       enemyWinRate: "计算中",
       myWinRate: "计算中",
-      currentModel: "猜牌模式",
+      currentModel: "自选模式",
       functionList: [],
       enemyTeam: [{},{},{},{},{}],
       myTeam: [{},{},{},{},{}],
@@ -145,6 +145,14 @@ Page({
         isGuessModel: true,
         currentModel: "猜牌模式"
       })
+      this.cleanEnemySS()
+      this.cleanMySS()
+
+      wx.showToast({
+        title: '请选择我方和敌方第一张卡牌',
+        icon:'none',
+        mask: true
+      })
     }
     
   },
@@ -194,12 +202,13 @@ Page({
     }
 
     var count = 0
+    
     targetTeam.forEach(function (element) {
       if (element.Cardid != null) {
         count ++
       }
     })
-
+    console.log(count)
     if (this.data.isGuessModel && count == 1) {
       this.getGuessCardGroup(member.Cardid,res => {
         console.log(res)
@@ -208,18 +217,19 @@ Page({
         }
         if (isMy) {
           this.setData({
-            myTeam: res.data.data.group[0].cards
+            myTeam: res.data.data.group[0]
           })
+          
         } else {
           this.setData({
-            enemyTeam: res.data.data.group[0].cards
+            enemyTeam: res.data.data.group[0]
           })
         }
-        
+        this.getWinRate()
       })
+    } else{
+      this.getWinRate()
     }
-
-    this.getWinRate()
   },
   getDataInfo: function(isMy) {
 
