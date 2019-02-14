@@ -119,13 +119,17 @@ Page({
   //  清空地方式神
   cleanEnemySS: function() {
     this.setData({
-      enemyTeam: [{}, {}, {}, {}, {}]
+      enemyTeam: [{}, {}, {}, {}, {}],
+      myWinRate: "计算中",
+      enemyWinRate: "计算中"
     })
   },
   //  清空我方式神
   cleanMySS: function() {
     this.setData({
-      myTeam: [{},{},{},{},{}]
+      myTeam: [{},{},{},{},{}],
+      myWinRate: "计算中",
+      enemyWinRate: "计算中"
     })
   },
   //  更改模式
@@ -136,8 +140,6 @@ Page({
         currentModel: "自选模式",
         // isShowPayAlert: false
       })
-      this.getGuessCardGroup(true)
-      this.getGuessCardGroup(false)
     } else {
       this.setData({
         isGuessModel: true,
@@ -172,20 +174,48 @@ Page({
     var index = parseInt(e.currentTarget.dataset.index)
     var isMy = this.data.overflowY > 320
 
+    let member = this.data.SSList[index]
+    var targetTeam = null
     if (isMy) { // 我方
-      var myTeam = this.data.myTeam
-      myTeam[this.data.teamIndex] = this.data.SSList[index]
+      targetTeam = this.data.myTeam
+      targetTeam[this.data.teamIndex] = member
     
       this.setData({
-        myTeam: myTeam,
+        myTeam: targetTeam,
         isShowSSSelecteView: true
       })
     } else { // 敌方
-      var enemyTeam = this.data.enemyTeam
-      enemyTeam[this.data.teamIndex] = this.data.SSList[index]
+      targetTeam = this.data.enemyTeam
+      targetTeam[this.data.teamIndex] = member
       this.setData({
-        enemyTeam: enemyTeam,
+        enemyTeam: targetTeam,
         isShowSSSelecteView: true
+      })
+    }
+
+    var count = 0
+    targetTeam.forEach(function (element) {
+      if (element.Cardid != null) {
+        count ++
+      }
+    })
+
+    if (this.data.isGuessModel && count == 1) {
+      this.getGuessCardGroup(member.Cardid,res => {
+        console.log(res)
+        if (res.data.data.group.length == 0) {
+          return
+        }
+        if (isMy) {
+          this.setData({
+            myTeam: res.data.data.group[0].cards
+          })
+        } else {
+          this.setData({
+            enemyTeam: res.data.data.group[0].cards
+          })
+        }
+        
       })
     }
 
@@ -218,34 +248,32 @@ Page({
     })
   },
   //  获取猜牌模式卡组
-  getGuessCardGroup: function(isMy) {
-    wx:wx.request({
-      url: app.globalData.baseUrl + '/v1/querySCardGroup',
-      header: {
-        'content-type': 'application/json'
-      },
-      method: 'GET',
-      dataType: 'json',
-      responseType: 'text',
-      success: res => {
-        console.log(res)
-        if (isMy) {
-          this.setData({
-            myTeam: res.data.data.group
-          })
-        } else {
-          this.setData({
-            enemyTeam: res.data.data.group
-          })
-        }
-      },
-      fail: function(res) {
+  getGuessCardGroup: function (cardID,cb) {
+    let callback = new Promise((resolve,reject) => {
+      wx: wx.request({
+        url: app.globalData.baseUrl + '/v1/querySCardGroup',
+        data: {
+          'cardID': cardID
+        },
+        header: {
+          'content-type': 'application/x-www-form-urlencoded'
+        },
+        method: 'POST',
+        dataType: 'json',
+        responseType: 'text',
+        success: res => {
+          typeof cb == "function" && cb(res)
+        },
+        fail: function (res) {
+          typeof cb == "function" && cb(res)
+        },
+        complete: function (res) {
 
-      },
-      complete: function(res) {
-
-      },
+        },
+      })
     })
+    return callback;
+    
   },
   //  获取胜率
   getWinRate: function () {
@@ -285,21 +313,10 @@ Page({
       responseType: 'text',
       success: res => {
         console.log("计算胜率成功")
-        console.log(res)
-        var jsonStr = res.data;
-        console.log(jsonStr)
-        jsonStr = jsonStr.replace(" ", "");
-        if (typeof jsonStr != 'object') {
-          jsonStr = jsonStr.replace(/\ufeff/g, "");//重点
-          var jj = JSON.parse(jsonStr);
-          res.data = jj;
-        }
-        
-        console.log(res)
-        // this.setData({
-        //   myWinRate: res.data.data.winrate,
-        //   enemyWinRate: 1 - res.data.data.winrate
-        // })
+        this.setData({
+          myWinRate: res.data.data.winrate * 100 + "%",
+          enemyWinRate: (1 - res.data.data.winrate) * 100 + "%"
+        })
       },
       fail: function(res) {
         console.log("计算胜率失败")
