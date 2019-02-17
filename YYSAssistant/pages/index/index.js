@@ -323,9 +323,11 @@ Page({
       responseType: 'text',
       success: res => {
         console.log("计算胜率成功")
+        let winRate = res.data.data.winrate * 100;
+        console.log(winRate);
         this.setData({
-          myWinRate: res.data.data.winrate * 100 + "%",
-          enemyWinRate: (1 - res.data.data.winrate) * 100 + "%"
+          myWinRate: winRate.toFixed(2) + "%",
+          enemyWinRate: (100 - winRate.toFixed(2)) + "%"
         })
       },
       fail: function(res) {

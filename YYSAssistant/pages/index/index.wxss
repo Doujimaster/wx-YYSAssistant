@@ -48,7 +48,7 @@
   border-radius: 62rpx; 
   color: #9B9B9B; 
   font-size: 24rpx;
-  border-width: 2rpx;
+  border-width: 1px;
   border-style: solid;
   border-color: #979797;
 }
@@ -85,7 +85,7 @@
   border-radius: 24rpx; 
   color: #9B9B9B; 
   font-size: 24rpx; 
-  border-width: 2rpx;
+  border-width: 1px;
   border-style: solid;
   border-color: #979797;
   margin-top: 12rpx;
@@ -108,7 +108,7 @@
   align-items: center;
   width: 128rpx;
   height: 128rpx;
-  border-width: 2rpx;
+  border-width: 1px;
   border-style: solid;
   border-color: #979797;
 }
@@ -179,7 +179,7 @@
   position:fixed;
   display: flex;
   padding: 14rpx;
-  border-width: 4rpx;
+  border-width: 2px;
   border-color: #F5A623;
   border-style: solid;
   background-color: #fff;
@@ -190,7 +190,7 @@
 
 .overflowScrollContainer {
   padding: 14rpx;
-  border-width: 4rpx;
+  border-width: 2px;
   border-color: #F5A623;
   border-style: solid;
   background-color: #fff;
@@ -220,7 +220,8 @@
 .overflowArrow {
   position:fixed;
   width: 28rpx;
-  height: 16rpx;
+  height: 17rpx;
+  background-color: #fff;
 }
 
 .YYSOverflowItem {
@@ -238,7 +239,7 @@
 .overflowImg {
   width: 116rpx;
   height: 116rpx;
-  border-width: 2rpx;
+  border-width: 1px;
   border-color: #979797;
   border-style: solid;
 }
@@ -258,7 +259,7 @@
   width: 116rpx;
   height: 116rpx;
   border-radius: 58rpx; 
-  border-width: 2rpx;
+  border-width: 1px;
   border-style: solid;
   border-color: #979797;
 }
