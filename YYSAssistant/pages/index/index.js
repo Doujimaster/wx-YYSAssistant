@@ -7,10 +7,10 @@ Page({
       isShowPayAlert: true, //  true是隐藏
       isShowYYSSelecteView: true,//  true是隐藏
       isShowSSSelecteView: true,//  true是隐藏
-      isGuessModel: false,
+      isHideModeBtn: true,  //  隐藏模式按钮
+      isGuessModel: false, // 是否是猜牌模式
       enemyWinRate: "计算中",
       myWinRate: "计算中",
-      currentModel: "自选模式",
       functionList: [],
       enemyTeam: [{},{},{},{},{}],
       myTeam: [{},{},{},{},{}],
@@ -21,7 +21,8 @@ Page({
       overflowY:130,
       teamIndex: 0,
       arrowX: 0,
-      userInfo:{}
+      userInfo:{},
+      resInfo:""
   },
   onLoad: function () {
     var functionList = [
@@ -98,11 +99,27 @@ Page({
     )
   },
   //  展示敬请期待弹窗
-  onClickWaiteFunture: function() {
-    wx.showModal({
-      content: '敬请期待',
-      showCancel: false
-    })
+  onClickWaiteFunture: function(e) {
+    console.log(e)
+    var index = parseInt(e.currentTarget.dataset.index)
+    console.log(index)
+    switch (index) {
+      case 0:
+      break
+      case 1:
+      this.changeModel()
+      break
+      case 3,4:
+        wx.showModal({
+          content: '敬请期待',
+          showCancel: false
+        })
+      break
+      default:
+      console.log('不存在的分支')
+      break
+    }
+    
   },
   onTapCloseOverflow: function() {
     // console.log(this.data.isShowSSSelecteView)
@@ -137,13 +154,12 @@ Page({
     if (this.data.isGuessModel) {
       this.setData({
         isGuessModel: false,
-        currentModel: "自选模式",
-        // isShowPayAlert: false
+        isHideModeBtn: true,
       })
     } else {
       this.setData({
         isGuessModel: true,
-        currentModel: "猜牌模式"
+        isHideModeBtn: false,
       })
       this.cleanEnemySS()
       this.cleanMySS()
@@ -272,6 +288,7 @@ Page({
         dataType: 'json',
         responseType: 'text',
         success: res => {
+          console.log(res)
           typeof cb == "function" && cb(res)
         },
         fail: function (res) {
@@ -323,9 +340,11 @@ Page({
       responseType: 'text',
       success: res => {
         console.log("计算胜率成功")
+        console.log(res)
+        let winRate = res.data.data.winrate.toFixed(4)
         this.setData({
-          myWinRate: res.data.data.winrate * 100 + "%",
-          enemyWinRate: (1 - res.data.data.winrate) * 100 + "%"
+          myWinRate: winRate * 100 + "%",
+          enemyWinRate: (1 - winRate) * 100 + "%"
         })
       },
       fail: function(res) {

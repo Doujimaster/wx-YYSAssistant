@@ -1,100 +1,109 @@
 <!--index.wxml-->
 <view class="container" bindtap='onTapCloseOverflow'>
-  <view style='display: flex; flex-direction: column; align-items: center; justify-content: flex-start;'>
-    <view class='enemyContainer'>
-      <view class='YYSInfo'>
-        <view style='display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start;'>
-          <!-- 选择阴阳师 -->
-          <view class='YYSBtn' wx:if="{{enemyYYS==null}}" data-ismy='{{false}}' bindtap='onClickSelecteYYS'>
-            <view>选择</view>
-            <view>阴阳师</view>
+  <scroll-view scroll-y class='containerScroll'>
+    <!-- <view style='position:fixed;display: flex;flex-direction: column;align-items: center;justify-content: space-between;width: 100%;height: auto;'>
+      
+    </view>   -->
+
+    <view style='display: flex; flex-direction: column; align-items: center; justify-content: flex-start;width: 100%;height: auto;'>
+        <view class='enemyContainer'>
+          <view class='YYSInfo'>
+            <view style='display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start;'>
+              <!-- 选择阴阳师 -->
+              <view class='YYSBtn' wx:if="{{enemyYYS==null}}" data-ismy='{{false}}' bindtap='onClickSelecteYYS'>
+                <view>选择</view>
+                <view>阴阳师</view>
+              </view>
+              <image class='YYSBtn' src='{{enemyYYS.Avatarurl}}' wx:else="{{enemyYYS}}" data-ismy='{{false}}' bindtap='onClickSelecteYYS'></image>
+              <!-- 信息展示 -->
+              <view style='display: flex; flex-direction: column; justify-content: center; margin-left: 28rpx; height: 100%;'>
+                <view style='font-size: 36rpx; font-weight: 700;'>敌方</view>
+                <view style='display: flex; flex-direction: row; margin-top: 12rpx; font-size: 30rpx; height: 100%;'>
+                  <view style='color: #9B9B9B;'>胜率</view>
+                  <view style='color: #4A90E2; margin-left: 6rpx;'>{{enemyWinRate}}</view>
+                </view>
+              </view>
+            </view>
+            <!-- 模式选择 -->
+            <view class='modelContainer'>
+              <!-- 切换模式 -->
+              <view style='display: flex; flex-direction: row-reverse; align-items: center;' bindtap='changeModel'>
+                <view class='playModel' hidden='{{isHideModeBtn}}'>自选模式</view>
+                <image src='../../images/yys_info_mode_change_icon.png' hidden='{{isHideModeBtn}}' mode="aspectFill" class='modelImg'></image>
+              </view>
+              <view class='restart' bindtap='cleanEnemySS'>重新输入</view>
+            </view>
           </view>
-          <image class='YYSBtn' src='{{enemyYYS.Avatarurl}}' wx:else="{{enemyYYS}}" data-ismy='{{false}}' bindtap='onClickSelecteYYS'></image>
-          <!-- 信息展示 -->
-          <view style='display: flex; flex-direction: column; justify-content: center; margin-left: 28rpx; height: 100%;'>
-            <view style='font-size: 36rpx; font-weight: 700;'>敌方</view>
-            <view style='display: flex; flex-direction: row; margin-top: 12rpx; font-size: 30rpx; height: 100%;'>
-              <view style='color: #9B9B9B;'>胜率</view>
-              <view style='color: #4A90E2; margin-left: 6rpx;'>{{enemyWinRate}}</view>
+          <!-- 式神选择 -->
+          <view class='SSTable'>
+            <view wx:for="{{5}}" wx:key="this" data-index='{{index}}' data-ismy='{{false}}' bindtap='onClickSelecteSS'>
+              <view wx:if="{{enemyTeam[index].Coverurl == null}}"  class='SSItem'>
+                <image src='../../images/ss_add_icon.png' mode="aspectFill" class='SSItemIcon'></image>
+                <text class='SSItemText'>选择式神</text>
+              </view>
+              <image wx:else src="{{enemyTeam[index].Coverurl}}" class='SSItem'></image>
             </view>
           </view>
         </view>
-        <!-- 模式选择 -->
-        <view class='modelContainer'>
-          <!-- 切换模式 -->
-          <view style='display: flex; flex-direction: row-reverse; align-items: center;' bindtap='changeModel'>
-            <view class='playModel'>{{currentModel}}</view>
-            <image src='../../images/yys_info_mode_change_icon.png' mode="aspectFill" class='modelImg'></image>
-          </view>
-          <view class='restart' bindtap='cleanEnemySS'>重新输入</view>
-        </view>
-      </view>
-      <!-- 式神选择 -->
-      <view class='SSTable'>
-        <view wx:for="{{5}}" wx:key="this" data-index='{{index}}' data-ismy='{{false}}' bindtap='onClickSelecteSS'>
-          <view wx:if="{{enemyTeam[index].Coverurl == null}}"  class='SSItem'>
-            <image src='../../images/ss_add_icon.png' mode="aspectFill" class='SSItemIcon'></image>
-            <text class='SSItemText'>选择式神</text>
-          </view>
-          <image wx:else src="{{enemyTeam[index].Coverurl}}" class='SSItem'></image>
-        </view>
-      </view>
-    </view>
 
-
-    <view class='myContainer'>
-      <view class='YYSInfo'>
-        <view style='display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start;'>
-          <!-- 选择阴阳师 -->
-          <view class='YYSBtn' wx:if="{{myYYS==null}}" data-ismy='{{true}}' bindtap='onClickSelecteYYS'>
-            <view>选择</view>
-            <view>阴阳师</view>
+        <!-- 我方信息 -->
+        <view class='myContainer'>
+          <view class='YYSInfo'>
+            <view style='display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start;'>
+              <!-- 选择阴阳师 -->
+              <view class='YYSBtn' wx:if="{{myYYS==null}}" data-ismy='{{true}}' bindtap='onClickSelecteYYS'>
+                <view>选择</view>
+                <view>阴阳师</view>
+              </view>
+              <image wx:else class='YYSBtn' src='{{myYYS.Avatarurl}}' data-ismy='{{true}}' bindtap='onClickSelecteYYS'></image>
+              <!-- 信息展示 -->
+              <view style='display: flex; flex-direction: column; justify-content: center; margin-left: 28rpx; height: 100%;'>
+                <view style='font-size: 36rpx; font-weight: 700;'>我方</view>
+                <view style='display: flex; flex-direction: row; margin-top: 12rpx; font-size: 30rpx; height: 100%;'>
+                  <view style='color: #9B9B9B;'>胜率</view>
+                  <view style='color: #CF3245; margin-left: 6rpx;'>{{myWinRate}}</view>
+                </view>
+              </view>
+            </view>
+            <!-- 模式选择 -->
+            <view style='display: flex; flex-direction: column-reverse; justify-content: center; height: 100%; width: 148rpx;'>
+              <view class='restart' bindtap='cleanMySS'>重新输入</view>
+            </view>
           </view>
-          <image wx:else class='YYSBtn' src='{{myYYS.Avatarurl}}' data-ismy='{{true}}' bindtap='onClickSelecteYYS'></image>
-          <!-- 信息展示 -->
-          <view style='display: flex; flex-direction: column; justify-content: center; margin-left: 28rpx; height: 100%;'>
-            <view style='font-size: 36rpx; font-weight: 700;'>我方</view>
-            <view style='display: flex; flex-direction: row; margin-top: 12rpx; font-size: 30rpx; height: 100%;'>
-              <view style='color: #9B9B9B;'>胜率</view>
-              <view style='color: #CF3245; margin-left: 6rpx;'>{{myWinRate}}</view>
+          <!-- 式神选择 -->
+          <view class='SSTable'>
+            <view wx:for="{{5}}" data-index='{{index}}' wx:key="this" data-ismy='{{true}}' bindtap='onClickSelecteSS'>
+              <view wx:if="{{myTeam[index].Coverurl == null}}"  class='SSItem'>
+                <image src='../../images/ss_add_icon.png' mode="aspectFill" class='SSItemIcon'></image>
+                <text class='SSItemText'>选择式神</text>
+              </view>
+              <image wx:else src="{{myTeam[index].Coverurl}}" class='SSItem'></image>
             </view>
           </view>
         </view>
-        <!-- 模式选择 -->
-        <view style='display: flex; flex-direction: column-reverse; justify-content: center; height: 100%; width: 148rpx;'>
-          <view class='restart' bindtap='cleanMySS'>重新输入</view>
-        </view>
       </view>
-      <!-- 式神选择 -->
-      <view class='SSTable'>
-        <view wx:for="{{5}}" data-index='{{index}}' wx:key="this" data-ismy='{{true}}' bindtap='onClickSelecteSS'>
-          <view wx:if="{{myTeam[index].Coverurl == null}}"  class='SSItem'>
-            <image src='../../images/ss_add_icon.png' mode="aspectFill" class='SSItemIcon'></image>
-            <text class='SSItemText'>选择式神</text>
+      <view style='width: 100%;height: auto;background-color: #fff;margin-top: 40rpx;margin-bottom: 40rpx;'>
+        {{resInfo}}
+      </view>
+      <!-- 底部更多功能 -->
+      <view class='moreFunction'>
+        <!-- 标题 -->
+        <view style='display: flex; flex-direction: row; justify-content: center; align-items: center;margin-left: 28rpx; height: 40rpx;'>
+          <view style='width: 8rpx;height: 28rpx;background-color: #CF3245;'></view>
+          <text style='font-size: 28rpx;font-weight: 700;color: #4A4A4A; margin-left: 6rpx;'>更多功能</text>
+        </view>
+        <view style='display: flex;flex-direction: row;justify-content: space-around;width:100%;'>
+          <view wx:for="{{functionList}}" wx:key="name" wx:for-item="item" wx:key="name" data-index='{{index}}' class='functionItem' bindtap='onClickWaiteFunture'>
+            <image src='{{item.img}}' mode="aspectFill" class='moreFunctionImg'></image>
+            <text class='moreFunctionText'>{{item.name}}</text>
+            <text wx:if="{{item.des!=null}}" class='moreFunctionDesText'>{{item.des}}</text>
           </view>
-          <image wx:else src="{{myTeam[index].Coverurl}}" class='SSItem'></image>
         </view>
       </view>
-    </view>
-  </view>
-  
-  <!-- 底部更多功能 -->
-  <view class='moreFunction'>
-    <!-- 标题 -->
-    <view style='display: flex; flex-direction: row; justify-content: center; align-items: center;margin-left: 28rpx; height: 40rpx;'>
-      <view style='width: 8rpx;height: 28rpx;background-color: #CF3245;'></view>
-      <text style='font-size: 28rpx;font-weight: 700;color: #4A4A4A; margin-left: 6rpx;'>更多功能</text>
-    </view>
-    <view style='display: flex;flex-direction: row;justify-content: space-around;width:100%;'>
-      <view wx:for="{{functionList}}" wx:key="name" wx:for-item="item" wx:key="name" class='functionItem' bindtap='onClickWaiteFunture'>
-        <image src='{{item.img}}' mode="aspectFill" class='moreFunctionImg'></image>
-        <text class='moreFunctionText'>{{item.name}}</text>
-        <text wx:if="{{item.des!=null}}" class='moreFunctionDesText'>{{item.des}}</text>
-      </view>
-    </view>
-  </view>
+  </scroll-view>
+</view>
 
-  <!-- 阴阳师选择悬浮窗 -->
+<!-- 阴阳师选择悬浮窗 -->
   <view class='YYSSelecteView' hidden="{{isShowYYSSelecteView}}" style='margin-top: {{overflowY}}rpx'>
     <scroll-view scroll-x class='YYSOverflowScrollContainer'>
       <view wx:for="{{YYSList}}" wx:key="Roleid" wx:for-item="item" data-index='{{index}}' class='YYSOverflowItem' bindtap='chooseYYS'>
@@ -117,7 +126,6 @@
     </scroll-view>
     <image class='overflowArrow' src='../../images/overflow_arrow.png' style='left:{{arrowX}}rpx;'></image>
   </view>
-</view>
 
 <view class='paymentAlert' hidden='{{isShowPayAlert}}' bindtap='onTapCloseAlert'>
   <view class='alertContainer'>
