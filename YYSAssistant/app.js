@@ -38,7 +38,7 @@ App({
   },
   globalData: {
     userInfo: null,
-    baseUrl: "http://193.112.127.7:8080",
+    baseUrl: "https://www.eos1234.cn:8080",
     openID: null,
     session: null
   },
