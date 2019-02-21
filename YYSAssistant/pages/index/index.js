@@ -8,6 +8,7 @@ Page({
       isShowYYSSelecteView: true,//  true是隐藏
       isShowSSSelecteView: true,//  true是隐藏
       isHideModeBtn: true,  //  隐藏模式按钮
+      isHideDetail: true,  //  详情框
       isGuessModel: false, // 是否是猜牌模式
       enemyWinRate: "计算中",
       myWinRate: "计算中",
@@ -138,6 +139,7 @@ Page({
     this.setData({
       enemyTeam: [{}, {}, {}, {}, {}],
       myWinRate: "计算中",
+      isHideDetail:true,
       enemyWinRate: "计算中"
     })
   },
@@ -146,6 +148,7 @@ Page({
     this.setData({
       myTeam: [{},{},{},{},{}],
       myWinRate: "计算中",
+      isHideDetail: true,
       enemyWinRate: "计算中"
     })
   },
@@ -231,14 +234,22 @@ Page({
         if (res.data.data.group.length == 0) {
           return
         }
+        let timestamp = Date.parse(new Date());
+        let index = timestamp % res.data.data.group.length
+        let group = res.data.data.group[index].Cards
+        let detail = res.data.data.group[index].Detail
+        console.log('-----------------')
+        console.log(group)
         if (isMy) {
           this.setData({
-            myTeam: res.data.data.group[0]
+            myTeam: group,
+            resInfo: detail
           })
           
         } else {
           this.setData({
-            enemyTeam: res.data.data.group[0]
+            enemyTeam: group,
+            resInfo: detail
           })
         }
         this.getWinRate()
@@ -288,7 +299,6 @@ Page({
         dataType: 'json',
         responseType: 'text',
         success: res => {
-          console.log(res)
           typeof cb == "function" && cb(res)
         },
         fail: function (res) {
@@ -344,7 +354,9 @@ Page({
         let winRate = res.data.data.winrate.toFixed(4)
         this.setData({
           myWinRate: winRate * 100 + "%",
-          enemyWinRate: (1 - winRate) * 100 + "%"
+          enemyWinRate: (1 - winRate) * 100 + "%",
+          isHideDetail: false
+
         })
       },
       fail: function(res) {

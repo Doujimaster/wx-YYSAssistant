@@ -82,7 +82,7 @@
           </view>
         </view>
       </view>
-      <view style='width: 100%;height: auto;background-color: #fff;margin-top: 40rpx;margin-bottom: 40rpx;'>
+      <view hidden='{{isHideDetail}}' style='width: 100%;height: auto;background-color: #fff;margin-top: 40rpx;margin-bottom: 40rpx;'>
         {{resInfo}}
       </view>
       <!-- 底部更多功能 -->
