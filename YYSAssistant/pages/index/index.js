@@ -140,7 +140,8 @@ Page({
       enemyTeam: [{}, {}, {}, {}, {}],
       myWinRate: "计算中",
       isHideDetail:true,
-      enemyWinRate: "计算中"
+      enemyWinRate: "计算中",
+      enemyYYS:null
     })
   },
   //  清空我方式神
@@ -149,7 +150,9 @@ Page({
       myTeam: [{},{},{},{},{}],
       myWinRate: "计算中",
       isHideDetail: true,
-      enemyWinRate: "计算中"
+      enemyWinRate: "计算中",
+      myYYS:null
+
     })
   },
   //  更改模式
@@ -214,6 +217,7 @@ Page({
     } else { // 敌方
       targetTeam = this.data.enemyTeam
       targetTeam[this.data.teamIndex] = member
+      
       this.setData({
         enemyTeam: targetTeam,
         isShowSSSelecteView: true
@@ -230,6 +234,7 @@ Page({
     console.log(count)
     if (this.data.isGuessModel && count == 1) {
       this.getGuessCardGroup(member.Cardid,res => {
+        console.log('team')
         console.log(res)
         if (res.data.data.group.length == 0) {
           return
@@ -238,18 +243,22 @@ Page({
         let index = timestamp % res.data.data.group.length
         let group = res.data.data.group[index].Cards
         let detail = res.data.data.group[index].Detail
+        let role = res.data.data.group[index].Role
         console.log('-----------------')
         console.log(group)
         if (isMy) {
           this.setData({
             myTeam: group,
+            myYYS: role,
             resInfo: detail
           })
           
         } else {
           this.setData({
             enemyTeam: group,
+            enemyYYS: role,
             resInfo: detail
+            
           })
         }
         this.getWinRate()
@@ -318,19 +327,21 @@ Page({
     var cards = []
     var hisCards = []
 
+    console.log('111111')
     this.data.myTeam.forEach(function (element) {
       if (element.Cardid != null) {
         cards.push(element.Cardid)
       }
       
     });
-
+    console.log('22222')
     this.data.enemyTeam.forEach(function (element) {
       if (element.Cardid != null) {
         hisCards.push(element.Cardid)
       }
 
     });
+    console.log('333333')
 
     if (cards.length != 5 || hisCards.length != 5) {
       return
