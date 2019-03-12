@@ -1,11 +1,8 @@
 <!--index.wxml-->
+<import src="../wxParse/wxParse.wxml"/>
 <view class="container" bindtap='onTapCloseOverflow'>
   <scroll-view scroll-y class='containerScroll'>
-    <!-- <view style='position:fixed;display: flex;flex-direction: column;align-items: center;justify-content: space-between;width: 100%;height: auto;'>
-      
-    </view>   -->
-
-    <view style='display: flex; flex-direction: column; align-items: center; justify-content: flex-start;width: 100%;height: auto;'>
+    <view style='display: flex; flex-direction: column; align-items: center; justify-content: flex-start;width: 100%;height:{{scrollViewHeight}}px;'>
         <view class='enemyContainer'>
           <view class='YYSInfo'>
             <view style='display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start;'>
@@ -82,8 +79,11 @@
           </view>
         </view>
       </view>
-      <view hidden='{{isHideDetail}}' style='width: 100%;height: auto;background-color: #fff;margin-top: 40rpx;margin-bottom: 40rpx;'>
-        {{resInfo}}
+      <!-- <view hidden='{{isHideDetail}}' style='width: 100%;height: auto;background-color: #fff;margin-top: 40rpx;margin-bottom: 40rpx;'>
+        <template is="wxParse" data="{{wxParseData:article.nodes}}"/>
+      </view> -->
+      <view hidden='{{isHideDetail}}' style='display:block;width:99%;height:auto;background-color:#BAC8D8;padding:10rpx;white-space: normal;'>
+      {{resInfo}}
       </view>
       <!-- 底部更多功能 -->
       <view class='moreFunction'>

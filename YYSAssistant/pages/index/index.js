@@ -1,4 +1,5 @@
 //index.js
+var WxParse = require('../wxParse/wxParse.js');
 //获取应用实例
 const app = getApp()
 
@@ -10,6 +11,7 @@ Page({
       isHideModeBtn: true,  //  隐藏模式按钮
       isHideDetail: true,  //  详情框
       isGuessModel: false, // 是否是猜牌模式
+      isReadyHide: false,
       enemyWinRate: "计算中",
       myWinRate: "计算中",
       functionList: [],
@@ -21,20 +23,36 @@ Page({
       myYYS: null,
       overflowY:130,
       teamIndex: 0,
+      modelName:'猜牌模式',
       arrowX: 0,
       userInfo:{},
-      resInfo:""
+      resInfo:"",
+      scrollViewHeight:0,
+      // 页面总高度将会放在这里
+      windowHeight: 0,
   },
   onLoad: function () {
+    // 先取出页面高度 windowHeight
+    wx.getSystemInfo({
+      success: res=> {
+        console.log('-------')
+        console.log(res)
+        this.setData({
+          windowHeight: res.windowHeight,
+          scrollViewHeight: res.windowHeight - 168
+        })
+      },
+    })
+
     var functionList = [
       {
         img:"../../images/more_function_grade_img.png",
         name: "模拟对战",
-        des: ""
+        des: "即将上线"
       },
       {
         img: "../../images/more_function_team_config_img.png",
-        name: "猜牌模式",
+        name: '猜牌模式',
         des: ""
       },
       {
@@ -58,11 +76,12 @@ Page({
     })
 
     this.getDataInfo();
-
+    // WxParse.wxParse('article', 'html', this.data.resInfo, this, 5);
   },
   //  点击选择阴阳师
   onClickSelecteYYS: function(e) {
 
+    this.isReadyHide = true;
     var isMy = e.currentTarget.dataset.ismy;
     var y = this.data.overflowY;
     if (isMy) {
@@ -81,6 +100,8 @@ Page({
   },
   //  点击选择式神
   onClickSelecteSS: function(e) {
+
+    this.isReadyHide = true;
     var isMy = e.currentTarget.dataset.ismy
     var y = this.data.overflowY
     var index = parseInt(e.currentTarget.dataset.index)
@@ -105,37 +126,38 @@ Page({
     var index = parseInt(e.currentTarget.dataset.index)
     console.log(index)
     switch (index) {
-      case 0:
-      break
       case 1:
-      this.changeModel()
-      break
-      case 3,4:
-        wx.showModal({
-          content: '敬请期待',
-          showCancel: false
-        })
+        if (!this.data.isGuessModel) {
+          this.changeModel()
+        }
       break
       default:
-      console.log('不存在的分支')
+        wx.showModal({
+          content: '功能正在开发，敬请期待',
+          showCancel: false
+        })
       break
     }
     
   },
   onTapCloseOverflow: function() {
-    // console.log(this.data.isShowSSSelecteView)
-    // console.log(this.data.isShowYYSSelecteView)
-    // if (!this.data.isShowSSSelecteView || !this.data.isShowYYSSelecteView) {
-    //   this.setData(
-    //     {
-    //       isShowSSSelecteView: true,
-    //       isShowYYSSelecteView: true
-    //     }
-    //   )
-    // }
+    if(this.isReadyHide){
+      this.isReadyHide = false
+      return
+    }
+
+    if (!this.data.isShowSSSelecteView || !this.data.isShowYYSSelecteView) {
+      this.setData(
+        {
+          isShowSSSelecteView: true,
+          isShowYYSSelecteView: true
+        }
+      )
+    }
   },
   //  清空地方式神
   cleanEnemySS: function() {
+    this.scrollViewHeight = this.windowHeight - 168
     this.setData({
       enemyTeam: [{}, {}, {}, {}, {}],
       myWinRate: "计算中",
@@ -146,10 +168,12 @@ Page({
   },
   //  清空我方式神
   cleanMySS: function() {
+    this.scrollViewHeight= this.windowHeight - 168
     this.setData({
       myTeam: [{},{},{},{},{}],
       myWinRate: "计算中",
       isHideDetail: true,
+      
       enemyWinRate: "计算中",
       myYYS:null
 
@@ -161,11 +185,13 @@ Page({
       this.setData({
         isGuessModel: false,
         isHideModeBtn: true,
+        modelName:'猜牌模式'
       })
     } else {
       this.setData({
         isGuessModel: true,
         isHideModeBtn: false,
+        modelName: '自选模式'
       })
       this.cleanEnemySS()
       this.cleanMySS()
@@ -180,6 +206,7 @@ Page({
   },
   //  选择阴阳师
   chooseYYS: function(e) {
+    
     var index = parseInt(e.currentTarget.dataset.index)
     var isMy = this.data.overflowY > 320
     if (isMy) {
@@ -246,6 +273,7 @@ Page({
         let role = res.data.data.group[index].Role
         console.log('-----------------')
         console.log(group)
+        
         if (isMy) {
           this.setData({
             myTeam: group,
@@ -327,21 +355,19 @@ Page({
     var cards = []
     var hisCards = []
 
-    console.log('111111')
     this.data.myTeam.forEach(function (element) {
       if (element.Cardid != null) {
         cards.push(element.Cardid)
       }
       
     });
-    console.log('22222')
+
     this.data.enemyTeam.forEach(function (element) {
       if (element.Cardid != null) {
         hisCards.push(element.Cardid)
       }
 
     });
-    console.log('333333')
 
     if (cards.length != 5 || hisCards.length != 5) {
       return
@@ -364,11 +390,13 @@ Page({
         console.log(res)
         let winRate = res.data.data.winrate.toFixed(4)
         this.setData({
-          myWinRate: winRate * 100 + "%",
-          enemyWinRate: (1 - winRate) * 100 + "%",
-          isHideDetail: false
+          myWinRate: (winRate * 100).toFixed(2) + "%",
+          enemyWinRate: (100 - winRate * 100).toFixed(2) + "%",
+          isHideDetail: false,
+          scrollViewHeight:'auto'
 
         })
+        // WxParse.wxParse('article', 'html', this.data.resInfo, this, 5);
       },
       fail: function(res) {
         console.log("计算胜率失败")
